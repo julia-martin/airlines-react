@@ -1,3 +1,6 @@
+## For team
+Remember to create a new branch for your feature, never make any commits directly to main.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import './App.css';
-import data from './data.js';
+import React, { Component } from "react";
+import "./App.css";
+import data from "./data.js";
 const { routes, airlines, airports } = data;
 
 const App = () => {
@@ -20,17 +20,19 @@ const App = () => {
           </thead>
           <tbody>
             {routes.map(({ airline, src, dest }) => {
-              return (<tr>
-                <td>{airline}</td>
-                <td>{src}</td>
-                <td>{dest}</td>
-                </tr>)
-              })}
+              return (
+                <tr>
+                  <td>{airline}</td>
+                  <td>{src}</td>
+                  <td>{dest}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </section>
     </div>
-  )
-}
+  );
+};
 
 export default App;

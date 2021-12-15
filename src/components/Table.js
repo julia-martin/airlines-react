@@ -6,7 +6,11 @@ const Table = ({ className, columns, rows }) => {
       <thead>
         <tr>
           {columns.map(({ name, property }) => {
-            return <th property={property} key={`${property}-header`}>{name}</th>;
+            return (
+              <th property={property} key={`${property}-header`}>
+                {name}
+              </th>
+            );
           })}
         </tr>
       </thead>

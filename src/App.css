@@ -70,3 +70,7 @@ svg circle.source {
   fill: lightgreen;
   r: 0.5;
 }
+
+.table-nav button {
+  margin: 5px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Component } from "react";
 import "./App.css";
 import Table from "./components/Table";
+import TableMessage from "./components/TableMessage";
 import TableNavBtns from "./components/TableNavBtns";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
@@ -49,6 +50,7 @@ const App = () => {
           rows={displayedRows}
           format=""
         />
+        <TableMessage firstN={rowStartIdx} totalRows={rows.length}/>
         <TableNavBtns handlePrevPage={handlePrevPage} handleNextPage={handleNextPage} />
       </section>
     </div>

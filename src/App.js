@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, Component } from "react";
 import "./App.css";
 import Table from "./components/Table";
+import TableMessage from "./components/TableMessage";
+import TableNavBtns from "./components/TableNavBtns";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -20,7 +22,26 @@ const rows = routes.map((route) => {
   };
 });
 
+const rowsPerPage = 25;
+
 const App = () => {
+  const [rowStartIdx, setRowStartIdx] = useState(0);
+  const [displayedRows, setDisplayedRows] = useState(
+    rows.slice(0, rowsPerPage)
+  );
+
+  useEffect(() => {
+    setDisplayedRows(rows.slice(rowStartIdx, rowStartIdx + rowsPerPage));
+  }, [rowStartIdx]);
+
+  const handlePrevPage = () => {
+    setRowStartIdx(rowStartIdx - rowsPerPage);
+  };
+
+  const handleNextPage = () => {
+    setRowStartIdx(rowStartIdx + rowsPerPage);
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -30,8 +51,20 @@ const App = () => {
         <Table
           className="routes-table"
           columns={columns}
-          rows={rows}
+          rows={displayedRows}
+          perPage={rowsPerPage}
           format=""
+        />
+        <TableMessage
+          firstN={rowStartIdx}
+          totalRows={rows.length}
+          perPage={rowsPerPage}
+        />
+        <TableNavBtns
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          prevDisabled={rowStartIdx === 0}
+          nextDisabled={rowStartIdx + rowsPerPage >= rows.length}
         />
       </section>
     </div>

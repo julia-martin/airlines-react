@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./App.css";
 import Table from "./components/Table";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
@@ -20,6 +20,8 @@ const rows = routes.map((route) => {
   };
 });
 
+const rowsPerPage = 25;
+
 const App = () => {
   return (
     <div className="app">
@@ -31,6 +33,7 @@ const App = () => {
           className="routes-table"
           columns={columns}
           rows={rows}
+          perPage={rowsPerPage}
           format=""
         />
       </section>

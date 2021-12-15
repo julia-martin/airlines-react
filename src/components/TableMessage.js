@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const TableMessage = ({ firstN, totalRows }) => {
+const TableMessage = ({ firstN, totalRows, perPage }) => {
   return (
-    <p>Showing {firstN + 1}-{firstN + 25} of {totalRows} routes.</p>
+    <p>
+      Showing {firstN + 1}-{firstN + perPage} of {totalRows} routes.
+    </p>
   );
 };
 
 export default TableMessage;
-

@@ -22,20 +22,24 @@ const rows = routes.map((route) => {
   };
 });
 
+const rowsPerPage = 25;
+
 const App = () => {
   const [rowStartIdx, setRowStartIdx] = useState(0);
-  const [displayedRows, setDisplayedRows] = useState(rows.slice(0, 25));
+  const [displayedRows, setDisplayedRows] = useState(
+    rows.slice(0, rowsPerPage)
+  );
 
   useEffect(() => {
-    setDisplayedRows(rows.slice(rowStartIdx, rowStartIdx + 25));
+    setDisplayedRows(rows.slice(rowStartIdx, rowStartIdx + rowsPerPage));
   }, [rowStartIdx]);
 
   const handlePrevPage = () => {
-    setRowStartIdx(rowStartIdx - 25);
+    setRowStartIdx(rowStartIdx - rowsPerPage);
   };
 
   const handleNextPage = () => {
-    setRowStartIdx(rowStartIdx + 25);
+    setRowStartIdx(rowStartIdx + rowsPerPage);
   };
 
   return (
@@ -48,14 +52,19 @@ const App = () => {
           className="routes-table"
           columns={columns}
           rows={displayedRows}
+          perPage={rowsPerPage}
           format=""
         />
-        <TableMessage firstN={rowStartIdx} totalRows={rows.length} />
+        <TableMessage
+          firstN={rowStartIdx}
+          totalRows={rows.length}
+          perPage={rowsPerPage}
+        />
         <TableNavBtns
           handlePrevPage={handlePrevPage}
           handleNextPage={handleNextPage}
           prevDisabled={rowStartIdx === 0}
-          nextDisabled={rowStartIdx + 25 >= rows.length}
+          nextDisabled={rowStartIdx + rowsPerPage >= rows.length}
         />
       </section>
     </div>

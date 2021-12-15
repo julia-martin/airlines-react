@@ -6,16 +6,16 @@ const Table = ({ className, columns, rows }) => {
       <thead>
         <tr>
           {columns.map(({ name, property }) => {
-            return <th property={property}>{name}</th>;
+            return <th property={property} key={`${property}-header`}>{name}</th>;
           })}
         </tr>
       </thead>
       <tbody>
-        {rows.map((row, index) => {
+        {rows.map((row, rowIndex) => {
           return (
-            <tr>
-              {Object.values(row).map((value) => {
-                return <td>{value}</td>;
+            <tr key={`row-${rowIndex}`}>
+              {Object.values(row).map((value, colIndex) => {
+                return <td key={`col-${colIndex}`}>{value}</td>;
               })}
             </tr>
           );

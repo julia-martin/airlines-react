@@ -23,8 +23,8 @@ const rows = routes.map((route) => {
 });
 
 const App = () => {
-  const [ rowStartIdx, setRowStartIdx ] = useState(0);
-  const [ displayedRows, setDisplayedRows ] = useState(rows.slice(0, 25));
+  const [rowStartIdx, setRowStartIdx] = useState(0);
+  const [displayedRows, setDisplayedRows] = useState(rows.slice(0, 25));
 
   useEffect(() => {
     setDisplayedRows(rows.slice(rowStartIdx, rowStartIdx + 25));
@@ -50,8 +50,13 @@ const App = () => {
           rows={displayedRows}
           format=""
         />
-        <TableMessage firstN={rowStartIdx} totalRows={rows.length}/>
-        <TableNavBtns handlePrevPage={handlePrevPage} handleNextPage={handleNextPage} />
+        <TableMessage firstN={rowStartIdx} totalRows={rows.length} />
+        <TableNavBtns
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          prevDisabled={rowStartIdx === 0}
+          nextDisabled={rowStartIdx + 25 >= rows.length}
+        />
       </section>
     </div>
   );

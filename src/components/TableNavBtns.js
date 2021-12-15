@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TableNavBtns = ({ handlePrevPage, handleNextPage }) => {
+const TableNavBtns = ({ handlePrevPage, handleNextPage, prevDisabled, nextDisabled }) => {
   return  (
     <div className="table-nav">
-      <button onClick={handlePrevPage}>Previous Page</button>
-      <button onClick={handleNextPage}>Next Page</button>
+      <button onClick={handlePrevPage} disabled={prevDisabled}>Previous Page</button>
+      <button onClick={handleNextPage} disabled={nextDisabled}>Next Page</button>
     </div>
   );
 };

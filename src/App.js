@@ -32,19 +32,33 @@ const airlineOptionConfig = {
   }
 }
 
+const airportOptionConfig = {
+  key: "code",
+  value: "name",
+  allOption: {
+    value: "all",
+    name: "All Airports"
+  }
+}
+
 const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
 
 
-  const handleSelection = (e) => {
+  const handleSelection = () => {
     const airlineFilter = document.getElementById("airline").value;
+    const airportFilter = document.getElementById("airport").value;
 
     setFilteredRows(
       rows.filter((row) => {
         const matchesAirline =
           airlineFilter === "all" || row.airline === airlineFilter;
+        const matchesAirport =
+          airportFilter === "all" ||
+          row.src === airportFilter ||
+          row.dest === airportFilter;
 
-        return matchesAirline;
+        return matchesAirline && matchesAirport;
       })
     );
   };
@@ -62,6 +76,13 @@ const App = () => {
             onSelect={handleSelection}
             options={airlines}
             optConfig={airlineOptionConfig}
+          />
+          flying in or out of
+          <Select
+            id="airport"
+            onSelect={handleSelection}
+            options={airports}
+            optConfig={airportOptionConfig}
           />
         </p>
         <Table

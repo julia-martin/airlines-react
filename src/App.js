@@ -46,6 +46,26 @@ const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
   const [filters, setFilters] = useState({ airline: "all", airport: "all" });
 
+  const getEligibleAirlines = () => {
+    return filteredRows.filter(row => filters.airline === "all" || row.airline === filters.airline)
+      .map(row => row.airline)
+      .reduce((acc, elem) => {
+        acc[elem] = true;
+        return acc;
+      }, {});
+  };
+
+  const getEligibleAirports = () => {
+    return filteredRows.filter(row => filters.airport === "all" || row.airport === filters.airport)
+      .map(row => [row.src, row.dest])
+      .reduce((acc, elem) => {
+        acc[elem[0]] = true;
+        acc[elem[1]] = true;
+        return acc;
+      }, {});
+  };
+
+  // When filters changes, update filtered rows
   useEffect(() => {
     setFilteredRows(
       rows.filter((row) => {
@@ -85,6 +105,7 @@ const App = () => {
             onSelect={handleSelection}
             options={airlines}
             optConfig={airlineOptionConfig}
+            eligible={getEligibleAirlines()}
           />
           flying in or out of
           <Select
@@ -93,6 +114,7 @@ const App = () => {
             onSelect={handleSelection}
             options={airports}
             optConfig={airportOptionConfig}
+            eligible={getEligibleAirports()}
           />
           <ClearFiltersBtn
             handleClick={clearFilters}

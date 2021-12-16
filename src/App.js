@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Table from "./components/Table";
 import Select from './components/Select';
@@ -44,28 +44,25 @@ const airportOptionConfig = {
 
 const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
+  const [filters, setFilters] = useState({ airline: 'all', airport: 'all' });
 
+  useEffect(() => {
+    setFilteredRows(rows.filter((row) => {
+      const matchesAirline = filters.airline === "all" || row.airline === filters.airline;
+      const matchesAirport = filters.airport === "all" || row.src === filters.airport || row.dest === filters.airport;
+      return matchesAirline && matchesAirport;
+    }));
+  }, [filters]);
 
   const handleSelection = () => {
-    const airlineFilter = document.getElementById("airline").value;
-    const airportFilter = document.getElementById("airport").value;
-
-    setFilteredRows(
-      rows.filter((row) => {
-        const matchesAirline =
-          airlineFilter === "all" || row.airline === airlineFilter;
-        const matchesAirport =
-          airportFilter === "all" ||
-          row.src === airportFilter ||
-          row.dest === airportFilter;
-
-        return matchesAirline && matchesAirport;
-      })
-    );
+    setFilters({
+      airline: document.getElementById("airline").value,
+      airport: document.getElementById("airport").value
+    });
   };
 
   const clearFilters = () => {
-    setFilteredRows(rows);
+    setFilters({ airline: 'all', airport: 'all' });
   };
 
   return (
@@ -77,6 +74,7 @@ const App = () => {
         <p>
           Show routes on
           <Select
+            selected={filters.airline}
             id="airline"
             onSelect={handleSelection}
             options={airlines}
@@ -84,6 +82,7 @@ const App = () => {
           />
           flying in or out of
           <Select
+            selected={filters.airport}
             id="airport"
             onSelect={handleSelection}
             options={airports}

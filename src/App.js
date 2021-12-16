@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Table from "./components/Table";
+import Select from './components/Select';
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -22,8 +23,18 @@ const rows = routes.map((route) => {
 
 const rowsPerPage = 25;
 
+const airlineOptionConfig = {
+  key: "id",
+  value: "name",
+  allOption: {
+    value: "all",
+    name: "All Airlines"
+  }
+}
+
 const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
+
 
   const handleSelection = (e) => {
     const airlineFilter = document.getElementById("airline").value;
@@ -46,16 +57,12 @@ const App = () => {
       <section>
         <p>
           Show routes on
-          <select id="airline" onChange={handleSelection}>
-            <option value="all">All Airlines</option>
-            {airlines.map((airline) => {
-              return (
-                <option key={airline.id} value={airline.name}>
-                  {airline.name}
-                </option>
-              );
-            })}
-          </select>
+          <Select
+            id="airline"
+            onSelect={handleSelection}
+            options={airlines}
+            optConfig={airlineOptionConfig}
+          />
         </p>
         <Table
           className="routes-table"

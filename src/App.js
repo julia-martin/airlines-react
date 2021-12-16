@@ -46,25 +46,22 @@ const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
   const [filters, setFilters] = useState({ airline: "all", airport: "all" });
 
-  const getEligibleAirlines = () => {
+  const getEligible = (category) => {
     return filteredRows
       .filter(
-        (row) => filters.airline === "all" || row.airline === filters.airline
+        (row) =>
+          filters[category] === "all" || row[category] === filters[category]
       )
-      .map((row) => row.airline)
-      .reduce((acc, elem) => ({ ...acc, [elem]: true }), {});
-  };
-
-  const getEligibleAirports = () => {
-    return filteredRows
-      .filter(
-        (row) => filters.airport === "all" || row.airport === filters.airport
-      )
-      .map((row) => [row.src, row.dest])
-      .reduce(
-        (acc, elem) => ({ ...acc, [elem[0]]: true, [elem[1]]: true }),
-        {}
-      );
+      .map((row) => row[category] || [row.src, row.dest])
+      .reduce((acc, elem) => {
+        if (typeof elem === "string") {
+          return { ...acc, [elem]: true };
+        } else if (Array.isArray(elem)) {
+          return { ...acc, [elem[0]]: true, [elem[1]]: true };
+        } else {
+          return {};
+        }
+      }, {});
   };
 
   // When filters change, update filtered rows
@@ -107,7 +104,7 @@ const App = () => {
             onSelect={handleSelection}
             options={airlines}
             optConfig={airlineOptionConfig}
-            eligible={getEligibleAirlines()}
+            eligible={getEligible("airline")}
           />
           flying in or out of
           <Select
@@ -116,7 +113,7 @@ const App = () => {
             onSelect={handleSelection}
             options={airports}
             optConfig={airportOptionConfig}
-            eligible={getEligibleAirports()}
+            eligible={getEligible("airport")}
           />
           <ClearFiltersBtn
             handleClick={clearFilters}

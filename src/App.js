@@ -64,6 +64,10 @@ const App = () => {
     );
   };
 
+  const clearFilters = () => {
+    setFilteredRows(rows);
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -85,7 +89,7 @@ const App = () => {
             options={airports}
             optConfig={airportOptionConfig}
           />
-          <ClearFiltersBtn>Show All Routes</ClearFiltersBtn>
+          <ClearFiltersBtn handleClick={clearFilters} disabled={filteredRows.length === rows.length}>Show All Routes</ClearFiltersBtn>
         </p>
         <Table
           className="routes-table"

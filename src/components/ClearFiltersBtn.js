@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ClearFiltersBtn = ({ children }) => {
+const ClearFiltersBtn = ({ handleClick, disabled, children }) => {
   return (
-    <button>
+    <button onClick={handleClick} disabled={disabled}>
       {children}
     </button>
   );

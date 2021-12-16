@@ -47,8 +47,11 @@ const App = () => {
   const [filters, setFilters] = useState({ airline: "all", airport: "all" });
 
   const getEligibleAirlines = () => {
-    return filteredRows.filter(row => filters.airline === "all" || row.airline === filters.airline)
-      .map(row => row.airline)
+    return filteredRows
+      .filter(
+        (row) => filters.airline === "all" || row.airline === filters.airline
+      )
+      .map((row) => row.airline)
       .reduce((acc, elem) => {
         acc[elem] = true;
         return acc;
@@ -56,8 +59,11 @@ const App = () => {
   };
 
   const getEligibleAirports = () => {
-    return filteredRows.filter(row => filters.airport === "all" || row.airport === filters.airport)
-      .map(row => [row.src, row.dest])
+    return filteredRows
+      .filter(
+        (row) => filters.airport === "all" || row.airport === filters.airport
+      )
+      .map((row) => [row.src, row.dest])
       .reduce((acc, elem) => {
         acc[elem[0]] = true;
         acc[elem[1]] = true;
@@ -65,7 +71,7 @@ const App = () => {
       }, {});
   };
 
-  // When filters changes, update filtered rows
+  // When filters change, update filtered rows
   useEffect(() => {
     setFilteredRows(
       rows.filter((row) => {

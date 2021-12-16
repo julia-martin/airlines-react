@@ -10,10 +10,10 @@ const Select = ({ selected, id, onSelect, options, optConfig }) => {
           <option key={opt[key]} value={opt[value]}>
             {opt[value]}
           </option>
-        )
+        );
       })}
     </select>
-  )
-}
+  );
+};
 
 export default Select;

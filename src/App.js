@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Table from "./components/Table";
-import Select from './components/Select';
-import ClearFiltersBtn from './components/ClearFiltersBtn';
+import Select from "./components/Select";
+import ClearFiltersBtn from "./components/ClearFiltersBtn";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -29,40 +29,46 @@ const airlineOptionConfig = {
   value: "name",
   allOption: {
     value: "all",
-    name: "All Airlines"
-  }
-}
+    name: "All Airlines",
+  },
+};
 
 const airportOptionConfig = {
   key: "code",
   value: "name",
   allOption: {
     value: "all",
-    name: "All Airports"
-  }
-}
+    name: "All Airports",
+  },
+};
 
 const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
-  const [filters, setFilters] = useState({ airline: 'all', airport: 'all' });
+  const [filters, setFilters] = useState({ airline: "all", airport: "all" });
 
   useEffect(() => {
-    setFilteredRows(rows.filter((row) => {
-      const matchesAirline = filters.airline === "all" || row.airline === filters.airline;
-      const matchesAirport = filters.airport === "all" || row.src === filters.airport || row.dest === filters.airport;
-      return matchesAirline && matchesAirport;
-    }));
+    setFilteredRows(
+      rows.filter((row) => {
+        const matchesAirline =
+          filters.airline === "all" || row.airline === filters.airline;
+        const matchesAirport =
+          filters.airport === "all" ||
+          row.src === filters.airport ||
+          row.dest === filters.airport;
+        return matchesAirline && matchesAirport;
+      })
+    );
   }, [filters]);
 
   const handleSelection = () => {
     setFilters({
       airline: document.getElementById("airline").value,
-      airport: document.getElementById("airport").value
+      airport: document.getElementById("airport").value,
     });
   };
 
   const clearFilters = () => {
-    setFilters({ airline: 'all', airport: 'all' });
+    setFilters({ airline: "all", airport: "all" });
   };
 
   return (
@@ -88,7 +94,12 @@ const App = () => {
             options={airports}
             optConfig={airportOptionConfig}
           />
-          <ClearFiltersBtn handleClick={clearFilters} disabled={filteredRows.length === rows.length}>Show All Routes</ClearFiltersBtn>
+          <ClearFiltersBtn
+            handleClick={clearFilters}
+            disabled={filteredRows.length === rows.length}
+          >
+            Show All Routes
+          </ClearFiltersBtn>
         </p>
         <Table
           className="routes-table"

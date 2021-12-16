@@ -52,10 +52,7 @@ const App = () => {
         (row) => filters.airline === "all" || row.airline === filters.airline
       )
       .map((row) => row.airline)
-      .reduce((acc, elem) => {
-        acc[elem] = true;
-        return acc;
-      }, {});
+      .reduce((acc, elem) => ({ ...acc, [elem]: true }), {});
   };
 
   const getEligibleAirports = () => {
@@ -64,11 +61,10 @@ const App = () => {
         (row) => filters.airport === "all" || row.airport === filters.airport
       )
       .map((row) => [row.src, row.dest])
-      .reduce((acc, elem) => {
-        acc[elem[0]] = true;
-        acc[elem[1]] = true;
-        return acc;
-      }, {});
+      .reduce(
+        (acc, elem) => ({ ...acc, [elem[0]]: true, [elem[1]]: true }),
+        {}
+      );
   };
 
   // When filters change, update filtered rows

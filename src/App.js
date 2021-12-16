@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import Table from "./components/Table";
 import Select from './components/Select';
+import ClearFiltersBtn from './components/ClearFiltersBtn';
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -84,6 +85,7 @@ const App = () => {
             options={airports}
             optConfig={airportOptionConfig}
           />
+          <ClearFiltersBtn>Show All Routes</ClearFiltersBtn>
         </p>
         <Table
           className="routes-table"

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Map = ({ routes, airlines, airports }) => {
-
-
-
+const Map = ({ routes }) => {
   return (
     <svg className="map" viewBox="-180 -90 360 180">
       <g transform="scale(1 -1)">
@@ -17,17 +14,24 @@ const Map = ({ routes, airlines, airports }) => {
           transform="scale(1 -1)"
         />
 
-        {/* for each route */}
-        <g key="">
-          <circle className="source" cx="" cy="">
-            <title></title>
-          </circle>
-          <circle className="destination" cx="" cy="">
-            <title></title>
-          </circle>
-          {/* <path d={`M${x1} ${y1} L ${x2} ${y2}`} /> */}
-        </g>
-        {/* end route */}
+        {routes.map((route, index) => {
+          const srcX = route.src.long;
+          const srcY = route.src.lat;
+          const destX = route.dest.long;
+          const destY = route.dest.lat;
+
+          return (
+            <g key={`route-${index}`}>
+              <circle className="source" cx={srcX} cy={srcY}>
+                <title></title>
+              </circle>
+              <circle className="destination" cx={destX} cy={destY}>
+                <title></title>
+              </circle>
+              <path d={`M${srcX} ${srcY} L ${destX} ${destY}`} />
+            </g>
+          );
+        })}
       </g>
     </svg>
   );

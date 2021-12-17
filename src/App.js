@@ -14,16 +14,32 @@ const columns = [
   { name: "Destination Airport", property: "dest" },
 ];
 
-// Convert routes into "human readable format"
+// Convert routes into format that can be used by the table and the map
 const rows = routes.map((route) => {
+  const { name: srcName, lat: srcLat, long: srcLong } = getAirportByCode(
+    route.src,
+    airports
+  );
+  const { name: destName, lat: destLat, long: destLong } = getAirportByCode(
+    route.dest,
+    airports
+  );
+
   return {
     airline: {
       name: getAirlineById(route.airline, airlines).name,
       id: route.airline,
     },
-    src: { name: getAirportByCode(route.src, airports).name, code: route.src },
+    src: {
+      name: srcName,
+      lat: srcLat,
+      long: srcLong,
+      code: route.src,
+    },
     dest: {
-      name: getAirportByCode(route.dest, airports).name,
+      name: destName,
+      lat: destLat,
+      long: destLong,
       code: route.dest,
     },
   };

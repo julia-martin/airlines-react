@@ -7,10 +7,10 @@ const Table = ({ className, columns, rows, perPage }) => {
   const [displayedRows, setDisplayedRows] = useState(rows.slice(0, perPage));
 
   useEffect(() => {
-    if (rows.length < rowStartIdx) {
-      setRowStartIdx(0);
-    }
+    setRowStartIdx(0);
+  }, [rows]);
 
+  useEffect(() => {
     setDisplayedRows(rows.slice(rowStartIdx, rowStartIdx + perPage));
   }, [rowStartIdx, rows, perPage]);
 

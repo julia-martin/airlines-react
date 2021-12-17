@@ -3,6 +3,7 @@ import "./App.css";
 import Table from "./components/Table";
 import Select from "./components/Select";
 import ClearFiltersBtn from "./components/ClearFiltersBtn";
+import Map from "./components/Map";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -16,9 +17,15 @@ const columns = [
 // Convert routes into "human readable format"
 const rows = routes.map((route) => {
   return {
-    airline: getAirlineById(route.airline, airlines).name,
-    src: getAirportByCode(route.src, airports).name,
-    dest: getAirportByCode(route.dest, airports).name,
+    airline: {
+      name: getAirlineById(route.airline, airlines).name,
+      id: route.airline,
+    },
+    src: { name: getAirportByCode(route.src, airports).name, code: route.src },
+    dest: {
+      name: getAirportByCode(route.dest, airports).name,
+      code: route.dest,
+    },
   };
 });
 
@@ -96,6 +103,7 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
+        <Map routes={filteredRows} airlines={airlines} airports={airports} />
         <p>
           Show routes on
           <Select

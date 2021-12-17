@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Table from "./components/Table";
-import Select from './components/Select';
+import Select from "./components/Select";
+import ClearFiltersBtn from "./components/ClearFiltersBtn";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -28,39 +29,65 @@ const airlineOptionConfig = {
   value: "name",
   allOption: {
     value: "all",
-    name: "All Airlines"
-  }
-}
+    name: "All Airlines",
+  },
+};
 
 const airportOptionConfig = {
   key: "code",
   value: "name",
   allOption: {
     value: "all",
-    name: "All Airports"
-  }
-}
+    name: "All Airports",
+  },
+};
 
 const App = () => {
   const [filteredRows, setFilteredRows] = useState(rows);
+  const [filters, setFilters] = useState({ airline: "all", airport: "all" });
 
+  const getEligible = (category) => {
+    return filteredRows
+      .filter(
+        (row) =>
+          filters[category] === "all" || row[category] === filters[category]
+      )
+      .map((row) => row[category] || [row.src, row.dest])
+      .reduce((acc, elem) => {
+        if (typeof elem === "string") {
+          return { ...acc, [elem]: true };
+        } else if (Array.isArray(elem)) {
+          return { ...acc, [elem[0]]: true, [elem[1]]: true };
+        } else {
+          return {};
+        }
+      }, {});
+  };
 
-  const handleSelection = () => {
-    const airlineFilter = document.getElementById("airline").value;
-    const airportFilter = document.getElementById("airport").value;
-
+  // When filters change, update filtered rows
+  useEffect(() => {
     setFilteredRows(
       rows.filter((row) => {
         const matchesAirline =
-          airlineFilter === "all" || row.airline === airlineFilter;
+          filters.airline === "all" || row.airline === filters.airline;
         const matchesAirport =
-          airportFilter === "all" ||
-          row.src === airportFilter ||
-          row.dest === airportFilter;
-
+          filters.airport === "all" ||
+          row.src === filters.airport ||
+          row.dest === filters.airport;
         return matchesAirline && matchesAirport;
       })
     );
+  }, [filters]);
+
+  const handleSelection = () => {
+    setFilters({
+      airline: document.getElementById("airline").value,
+      airport: document.getElementById("airport").value,
+    });
+  };
+
+  const clearFilters = () => {
+    setFilters({ airline: "all", airport: "all" });
   };
 
   return (
@@ -72,18 +99,28 @@ const App = () => {
         <p>
           Show routes on
           <Select
+            selected={filters.airline}
             id="airline"
             onSelect={handleSelection}
             options={airlines}
             optConfig={airlineOptionConfig}
+            eligible={getEligible("airline")}
           />
           flying in or out of
           <Select
+            selected={filters.airport}
             id="airport"
             onSelect={handleSelection}
             options={airports}
             optConfig={airportOptionConfig}
+            eligible={getEligible("airport")}
           />
+          <ClearFiltersBtn
+            handleClick={clearFilters}
+            disabled={filteredRows.length === rows.length}
+          >
+            Show All Routes
+          </ClearFiltersBtn>
         </p>
         <Table
           className="routes-table"

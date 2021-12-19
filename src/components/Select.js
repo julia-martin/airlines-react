@@ -7,7 +7,11 @@ const Select = ({ selected, id, onSelect, options, optConfig, eligible }) => {
       <option value={allOption.value}>{allOption.name}</option>
       {options.map((opt) => {
         return (
-          <option key={opt[key]} value={opt[value]} disabled={!(eligible[opt[value]] || false)}>
+          <option
+            key={opt[key]}
+            value={opt[value]}
+            disabled={!(eligible[opt[value]] || false)}
+          >
             {opt[value]}
           </option>
         );

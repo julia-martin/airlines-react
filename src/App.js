@@ -78,7 +78,7 @@ const App = () => {
           (category === "airline"
             ? row[category].name === filters[category]
             : row.src.name === filters[category] ||
-              row.dest.name === filters[category]) // change row
+              row.dest.name === filters[category])
       )
       .map((row) => {
         // returns array of strings, or returns array of arrays
@@ -87,7 +87,7 @@ const App = () => {
           : [row.src.name, row.dest.name];
       })
       .reduce((acc, elem) => {
-        // return object, {american airlines: true/false}
+        // return object, example: {american airlines: true}
         if (typeof elem === "string") {
           return { ...acc, [elem]: true };
         } else if (Array.isArray(elem)) {
@@ -102,13 +102,12 @@ const App = () => {
   useEffect(() => {
     setFilteredRows(
       rows.filter((row) => {
-        // change row
         const matchesAirline =
-          filters.airline === "all" || row.airline === filters.airline;
+          filters.airline === "all" || row.airline.name === filters.airline;
         const matchesAirport =
           filters.airport === "all" ||
-          row.src === filters.airport ||
-          row.dest === filters.airport;
+          row.src.name === filters.airport ||
+          row.dest.name === filters.airport;
         return matchesAirline && matchesAirport;
       })
     );
@@ -124,8 +123,6 @@ const App = () => {
   const clearFilters = () => {
     setFilters({ airline: "all", airport: "all" });
   };
-
-  console.log(getEligible("airport"));
 
   return (
     <div className="app">

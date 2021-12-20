@@ -41,7 +41,7 @@ const Table = ({ className, columns, rows, perPage }) => {
             return (
               <tr key={`row-${rowIndex}`}>
                 {Object.values(row).map((value, colIndex) => {
-                  return <td key={`col-${colIndex}`}>{value}</td>;
+                  return <td key={`col-${colIndex}`}>{value.name}</td>;
                 })}
               </tr>
             );

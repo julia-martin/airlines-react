@@ -3,6 +3,7 @@ import "./App.css";
 import Table from "./components/Table";
 import Select from "./components/Select";
 import ClearFiltersBtn from "./components/ClearFiltersBtn";
+import Map from "./components/Map";
 import data, { getAirlineById, getAirportByCode } from "./data.js";
 const { routes, airlines, airports } = data;
 
@@ -13,12 +14,34 @@ const columns = [
   { name: "Destination Airport", property: "dest" },
 ];
 
-// Convert routes into "human readable format"
+// Convert routes into format that can be used by the table and the map
 const rows = routes.map((route) => {
+  const { name: srcName, lat: srcLat, long: srcLong } = getAirportByCode(
+    route.src,
+    airports
+  );
+  const { name: destName, lat: destLat, long: destLong } = getAirportByCode(
+    route.dest,
+    airports
+  );
+
   return {
-    airline: getAirlineById(route.airline, airlines).name,
-    src: getAirportByCode(route.src, airports).name,
-    dest: getAirportByCode(route.dest, airports).name,
+    airline: {
+      name: getAirlineById(route.airline, airlines).name,
+      id: route.airline,
+    },
+    src: {
+      name: srcName,
+      lat: srcLat,
+      long: srcLong,
+      code: route.src,
+    },
+    dest: {
+      name: destName,
+      lat: destLat,
+      long: destLong,
+      code: route.dest,
+    },
   };
 });
 
@@ -49,11 +72,21 @@ const App = () => {
   const getEligible = (category) => {
     return filteredRows
       .filter(
+        // returns array or rows that match the filter
         (row) =>
-          filters[category] === "all" || row[category] === filters[category]
+          filters[category] === "all" ||
+          (category === "airline"
+            ? row[category].name === filters[category]
+            : row.src.name === filters[category])
       )
-      .map((row) => row[category] || [row.src, row.dest])
+      .map((row) => {
+        // returns array of strings, or returns array of arrays
+        return category === "airline"
+          ? row[category].name
+          : [row.src.name, row.dest.name];
+      })
       .reduce((acc, elem) => {
+        // return object, example: {american airlines: true}
         if (typeof elem === "string") {
           return { ...acc, [elem]: true };
         } else if (Array.isArray(elem)) {
@@ -69,11 +102,11 @@ const App = () => {
     setFilteredRows(
       rows.filter((row) => {
         const matchesAirline =
-          filters.airline === "all" || row.airline === filters.airline;
+          filters.airline === "all" || row.airline.name === filters.airline;
         const matchesAirport =
           filters.airport === "all" ||
-          row.src === filters.airport ||
-          row.dest === filters.airport;
+          row.src.name === filters.airport ||
+          row.dest.name === filters.airport;
         return matchesAirline && matchesAirport;
       })
     );
@@ -96,6 +129,7 @@ const App = () => {
         <h1 className="title">Airline Routes</h1>
       </header>
       <section>
+        <Map routes={filteredRows} airlines={airlines} airports={airports} />
         <p>
           Show routes on
           <Select

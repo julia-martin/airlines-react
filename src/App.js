@@ -77,8 +77,7 @@ const App = () => {
           filters[category] === "all" ||
           (category === "airline"
             ? row[category].name === filters[category]
-            : row.src.name === filters[category] ||
-              row.dest.name === filters[category])
+            : row.src.name === filters[category])
       )
       .map((row) => {
         // returns array of strings, or returns array of arrays
